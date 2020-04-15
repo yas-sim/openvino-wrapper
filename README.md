@@ -18,11 +18,11 @@ Before you start, you need to install and setup OpenVINO.
 
 1. Go to Intel distribution of OpenVINO toolkit [web page](https://software.intel.com/en-us/openvino-toolkit) and download an OpenVINO package suitable for your operating system
 2. Install OpenVINO and setup support tools and accelerators (optional) by following the instruction in ['Get Started'](https://software.intel.com/en-us/openvino-toolkit/documentation/get-started) page
-3. Clone repository to your system
+3. Open a command terminal
+4. Clone repository to your system
 ~~~shell
-$ git clone https://github.com/yas-sim/openvino-workshop-en
+$ git clone https://github.com/yas-sim/openvino-wrapper
 ~~~
-4. Open a command terminal
 5. Set up environment variables for OpenVINO
 ~~~
 Linux $ source /opt/intel/openvino/bin/setupvars.sh  
