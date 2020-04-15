@@ -13,6 +13,8 @@ rem Download googlenet-v1 and mobilenet-ssd models with Model Downloader and Mod
 python "%INTEL_OPENVINO_DIR%\deployment_tools\tools\model_downloader\downloader.py" --name googlenet-v1,mobilenet-ssd
 python "%INTEL_OPENVINO_DIR%\deployment_tools\tools\model_downloader\converter.py"  --name googlenet-v1,mobilenet-ssd --precisions FP16
 
+pip install matplotlib opencv-python numpy
+
 exit /B
 
 :error
