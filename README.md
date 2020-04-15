@@ -34,6 +34,8 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 6. Download images, class label text files, and deep-learning models using a script (`prep.sh`, or `prep.bat`)
 7. Run sample programs
 
+![iewrap_classification.py](./resources/classification.png)
+![iewrap_object_detection.py](./resources/objdet.png)
 ## Document
 
 This library only supports a deep-learning model which has 1 image input and 1 output. The model with multiple inputs or outputs won't work with this library.  
