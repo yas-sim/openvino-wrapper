@@ -1,6 +1,5 @@
 @echo off
 
-
 if "%INTEL_OPENVINO_DIR%" == "" goto error
 
 rem Copy image files and class label text data from OpenVINO installed directory
