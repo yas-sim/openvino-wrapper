@@ -15,3 +15,5 @@ cp $INTEL_OPENVINO_DIR/deployment_tools/inference_engine/samples/python/voc_labe
 # Download googlenet-v1 and mobilenet-ssd models with Model Downloader and Model Converter
 python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/downloader.py --name googlenet-v1,mobilenet-ssd
 python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/converter.py  --name googlenet-v1,mobilenet-ssd --precisions FP16
+
+pip3 install matplotlib opencv-python numpy
