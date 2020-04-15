@@ -34,6 +34,73 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 6. Download images, class label text files, and deep-learning models using a script (`prep.sh`, or `prep.bat`)
 7. Run sample programs
 
+## Document
+
+This library only supports a deep-learning model which has 1 image input and 1 output. The model with multiple inputs or outputs won't work with this library.  
+This library supports both blocking (synchronous) inferencing and asynchronous inferencing.  
+
+1. How to import this library
+~~~python
+import iewrap
+~~~
+
+2. API
+
+~~~python
+ieWrapper(modelFile=None, device='CPU', numRequest=4)
+~~~
+- *Description*
+ - This function creates a `ieWrapper` object.
+- *Input*
+ - `modelFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml). A weight file (.bin) with the same base file name wil be automatically loaded.
+ - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
+ - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on this device at a time.  
+- *Return*
+ - None
+
+~~~python
+readModel(xmlFile, binFile, device='CPU', numRequest=4)
+~~~
+- *Description*
+ - This function reads an OpenVINO IR model data. User does not need to use this function when you have read the model data in the constructor.  
+- *Input*
+ - `xmlFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml).
+ - `binFile`: Path to an OpenVINO IR format deep-learning model weight file (.xml).
+ - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
+ - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on this device at a time.  
+- *Return*
+ - None
+
+~~~python
+outBlob = blockInfer(img)
+~~~
+- *Description*
+ - Start blocking (synchronous) inferencing. The control won't back until the inference task is completed. You can immediately start processing the result after this function call. Blocking inferencing is easy to use but not efficient in terms of computer resource utilization.
+- *Input*
+ - `img`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB).  
+- *Return*
+ - `outBlob`: Output result of the inferencing
+
+~~~python
+infID = asyncInfer(img)
+~~~
+- *Description*
+ - Start asynchronous inferencing. Set a callback function before you call this function or the inferencing result will be wasted.
+- *Input*
+ - `img`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB).  
+- *Return*
+ - `infID`: ID number of the requested inferencing task
+
+~~~python
+setCallback(callback)
+~~~
+- *Description*
+ - Set a callback function which will be called after completion of each asynchronous inferencing.
+- *Input*
+ - `callback`: Name of the callback function. The callback function will receive 1 tuple parameter. The tuple consists of `infID` and `outBlob` `(infID, outBlob)`. You can check the inference result with `outBlob` and identify the reuslt is for which inference request by the `infID`.
+- *Return*
+ - None
+ 
 ## Requirement
 This workshop requires [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit
 ).
