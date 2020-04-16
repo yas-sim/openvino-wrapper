@@ -11,7 +11,8 @@ This library works with Intel Distribution of OpenVINO toolkit. Please make sure
 [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit).
 
 ## How easy is it?
-You can write a simple image classification program like this.
+You can write a simple image classification program like this.  
+簡単な画像分類プログラムならこんな感じで記述できます。  
 ~~~python
 import iewrap
 import cv2
