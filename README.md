@@ -3,13 +3,33 @@ This is a tiny Python class library to wrap and abstract the OpenVINO Inference 
 これはOpenVINOのInference EngineのラッパーライブラリでPythonで書かれています。これを使うことによってディープラーニング推論プログラムを数行で書くことが可能です。
 
 ## Description
-This library conceals common initialization and processing for OpenVINO Inference Engine. User can write a few lines of code to run deep-learning inferencing with this. As the result, user will have less flexibility if they want to run an advanced inferencing with this library but the code is very short and user can easily understand and modify it if they need special features.
+This library conceals common initialization and processing for OpenVINO Inference Engine. User can write a few lines of code to run deep-learning inferencing with this.  
 This library works with Intel Distribution of OpenVINO toolkit. Please make sure that you have installed and setup OpenVINO before try this.   
-このライブラリはOpenVINOのInference Engineの共通の初期化処理やデータ処理をまとめてクラス化したものです。ユーザーは数行のコードを書くだけでディープラーニングの推論を行うことが可能です。結果として、複雑な処理をしようとするといろいろ制限が出ますが、ライブラリのコードは短いので自分で改造して使用することも難しくありません。  
+このライブラリはOpenVINOのInference Engineの共通の初期化処理やデータ処理をまとめてクラス化したものです。ユーザーは数行のコードを書くだけでディープラーニングの推論を行うことが可能です。  
 このライブラリはIntel Distribution of OpenVINO toolkit用のライブラリです。OpenVINOをダウンロードしてセットアップをすることが必要になります。
 
 [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit).
 
+## How easy it is
+You can write a simple image classification program like this.  
+簡単な画像分類プログラムならこんな感じで記述できます。  
+~~~python
+import iewrap
+import cv2
+import numpy as np
+
+label = open('synset_words.txt').readlines()    # Read class label text file
+img = cv2.imread('car.png')                     # Read an image to infer
+
+ie = iewrap.ieWrapper('public/googlenet-v1/FP16/googlenet-v1.xml', 'CPU', 4)  # Create an Inference Engine object
+
+output = ie.blockInfer(img)[0]      # Do infer
+
+# Sort class probabilities and display top 5 classes
+idx = np.argsort(output)[::-1]
+for i in range(5):
+    print(idx[i]+1, output[idx[i]], label[idx[i]][:-1])
+~~~
 
 ## How to use
 Sample programs are provided with this library. You can try them to learn how to use this library.
@@ -32,10 +52,14 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 ~~~
 
 6. Download images, class label text files, and deep-learning models using a script (`prep.sh`, or `prep.bat`)
-7. Run sample programs
+7. Run sample programs  
 
+**`iewrap_classification.py` sample app**  
 ![iewrap_classification.py](./resources/classification.png)
-![iewrap_object_detection.py](./resources/objdet.png)
+
+**`iewrap_object_detection.py` sample app**  
+![iewrap_object_detection.py](./resources/objdet.png)  
+
 ## Document
 
 This library supports both blocking (synchronous) inferencing and asynchronous inferencing.  
@@ -53,9 +77,9 @@ ieWrapper(modelFile=None, device='CPU', numRequest=4)
 - *Description*
  - This function creates a `ieWrapper` object.
 - *Input*
- - `modelFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml). A weight file (.bin) with the same base file name wil be automatically loaded.
+ - `modelFile`: Path to an OpenVINO IR format deep-learning model topology file (`.xml`). A weight file (`.bin`) with the same base file name wil be automatically loaded.
  - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
- - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on this device at a time.  
+ - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on the device at a time.  
 - *Return*
  - None
 
@@ -63,12 +87,12 @@ ieWrapper(modelFile=None, device='CPU', numRequest=4)
 readModel(xmlFile, binFile, device='CPU', numRequest=4)
 ~~~
 - *Description*
- - This function reads an OpenVINO IR model data. User does not need to use this function when you have read the model data in the constructor.  
+ - This function reads an OpenVINO IR model data. User does not need to use this function when you have read the model data in the constructor (`ieWrapper()`).  
 - *Input*
  - `xmlFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml).
  - `binFile`: Path to an OpenVINO IR format deep-learning model weight file (.xml).
  - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
- - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on this device at a time.  
+ - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on the device at a time.  
 - *Return*
  - None
 
