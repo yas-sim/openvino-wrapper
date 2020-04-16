@@ -24,25 +24,25 @@ class ieWrapper:
 
     def readModel(self, xmlFile, binFile, device='CPU', numRequest=4):
         net = self.ie.read_network(xmlFile, binFile)
-        self.inputs  = []
-        self.outputs = []
+        self.inputs  = {}
+        self.outputs = {}
         for inblob in net.inputs:
-            self.inputs.append({ 'name':inblob, 'data': 0, 'shape':net.inputs[inblob].shape, 'type':'image' })
+            self.inputs[inblob] = { 'data' : 0, 'shape' : net.inputs[inblob].shape, 'type' : 'image' }
         for outblob in net.outputs:
-            self.outputs.append({ 'name':outblob, 'data': 0, 'shape':net.outputs[outblob].shape})
+            self.outputs[outblob] = { 'shape' : net.outputs[outblob].shape }
         self.execNet = self.ie.load_network(network=net, device_name=device, num_requests=numRequest)
         self.numRequests = numRequest
 
     # Return information of the inputs of a model
     # The list consists of dictionaries and each dictionary correspond to each input blob
     # The blob marked with 'image' type will go through image preprocessing (resize & transform)
-    # e.g. [ {'name':blobName, 'data':blobData, 'shape':blobShape, 'type':blobType('imgae' or others)} ]
+    # e.g. { blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType('imgae' or others)}, ... }
     def getInputs(self):
         return self.inputs
 
     # Return information of the outputs of a model
     # The list consists of dictionaries and each dictionary correspond to each output blob
-    # e.g. [ {'name':blobName, 'data':blobData, 'shape':blobShape } ]
+    # e.g. { blobName : { 'shape':blobShape }, ... }
     def getOutputs(self):
         return self.outputs
 
@@ -66,15 +66,16 @@ class ieWrapper:
     def createInputBlobDict(self, inputData):
         inBlobList = {}
         if type(inputData) is np.ndarray:      # if the input is single image
-            resizedImg = self.imagePreprocess(inputData, self.inputs[0]['shape'])
-            inBlobList = { self.inputs[0]['name'] : resizedImg }
-        elif type(inputData) is list:          # if the input is a list (multiple inputs)
-            for inblob in inputData:
-                if inblob['type']=='image':    # if the data is image, do preprocess
-                    resizedImg = self.imagePreprocess(inblob['data'], inblob['shape'])
-                    inBlobList[inblob['name']] = resizedImg
+            firstBlobName = next(iter(self.inputs))
+            resizedImg = self.imagePreprocess(inputData, self.inputs[firstBlobName]['shape'])
+            inBlobList = { firstBlobName : resizedImg }
+        elif type(inputData) is dict:         # if the input is a list (multiple inputs)
+            for k, v in inputData.items():
+                if v['type']=='image':        # if the data is image, do preprocess
+                    resizedImg = self.imagePreprocess(v['data'], v['shape'])
+                    inBlobList[k] = resizedImg
                 else:                          # otherwise, just set the data to input blob
-                    inBlobList[inblob['name']] = inblob['data']
+                    inBlobList[k] = v['data']
         else:
             raise
 
@@ -111,7 +112,8 @@ class ieWrapper:
         inBlobDict = self.createInputBlobDict(img)
         res = self.execNet.infer(inBlobDict)
         if(len(res)==1):
-            return res[self.outputs[0]['name']]   # if the model has only 1 output, return the blob contents in an array
+            firstBlobName = next(iter(self.outputs))
+            return res[firstBlobName]   # if the model has only 1 output, return the blob contents in an array
         else:
-            return res                            # if the model has multiple outputs, return the result in dictionary
-                                                   # e.g. ( {'prob': array[], 'data': array[]})
+            return res                  # if the model has multiple outputs, return the result in dictionary
+                                        # e.g. ( {'prob': array[], 'data': array[]})

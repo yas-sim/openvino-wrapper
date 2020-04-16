@@ -94,7 +94,7 @@ list = getOutputs()
  - None
 - *Output*
  - List of output blobs of the loaded model.
- - The list format is: `[ {'name':blobName, 'data':blobData, 'shape':blobShape}, ... ]`.
+ - The list format is: `[ {'name':blobName, 'shape':blobShape}, ... ]`.
 
 ~~~python
 1. outBlob = blockInfer(ocvImg)     # for single input model
@@ -115,7 +115,7 @@ list = getOutputs()
   - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
     - Key: The name of an output blob
     - Value: The contents of an output blob
-    - e.g. `[{'name': 'prob', 'data': 0, 'shape': [1, 1000]}]`
+    - e.g. `[{'name': 'prob', 'shape': [1, 1000]}]`
 
 ~~~python
 1. infID = asyncInfer(ocvimg)     # for single input model
@@ -145,7 +145,7 @@ setCallback(callback)
     - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
       - Key: The name of an output blob
       - Value: The contents of an output blob
-      - e.g. `[{'name': 'prob', 'data': 0, 'shape': [1, 1000]}]`
+      - e.g. `[{'name': 'prob', 'shape': [1, 1000]}]`
 - *Return*
  - None
  
