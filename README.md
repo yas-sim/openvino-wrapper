@@ -10,6 +10,25 @@ This library works with Intel Distribution of OpenVINO toolkit. Please make sure
 
 [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit).
 
+## How easy is it?
+You can write a simple image classification program like this.
+~~~python
+import iewrap
+import cv2
+import numpy as np
+
+label = open('synset_words.txt').readlines()
+img = cv2.imread('car.png')
+
+ie = iewrap.ieWrapper('public/googlenet-v1/FP16/googlenet-v1.xml', 'CPU', 4)
+
+output = ie.blockInfer(img)[0]      # Inferencing
+
+# Sort class probabilities and display top 5 classes
+idx = np.argsort(output)[::-1]
+for i in range(5):
+    print(idx[i]+1, output[idx[i]], label[idx[i]][:-1])
+~~~
 
 ## How to use
 Sample programs are provided with this library. You can try them to learn how to use this library.
