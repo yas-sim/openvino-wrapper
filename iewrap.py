@@ -114,4 +114,4 @@ class ieWrapper:
             return res[self.outputs[0]['name']]   # if the model has only 1 output, return the blob contents in an array
         else:
             return res                            # if the model has multiple outputs, return the result in dictionary
-                                                   # e.g. ( {'prob': array[], 'data': array[]})
+                                                  # e.g. ( {'prob': array[], 'data': array[]})
