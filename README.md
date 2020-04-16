@@ -106,7 +106,8 @@ list = getInputs()
  - None
 - *Output*
  - List of input blobs of the loaded model.
- - The list format is: `[ {'name':blobName, 'data':blobData, 'shape':blobShape, 'type':blobType('imgae' or others)}, ... ]`.
+ - The list format is: `{ blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType }, ... }`.
+   - `blobType` is a string. The value can be `image`, or others. If the type is `image`, the `blobData` will go through image preprocess before inferencing.
 
 ~~~python
 list = getOutputs()
@@ -118,7 +119,7 @@ list = getOutputs()
  - None
 - *Output*
  - List of output blobs of the loaded model.
- - The list format is: `[ {'name':blobName, 'shape':blobShape}, ... ]`.
+ - The list format is: `{ blobName : { 'shape':blobShape }, ... }`.
 
 ~~~python
 1. outBlob = blockInfer(ocvImg)     # for single input model
@@ -132,14 +133,14 @@ list = getOutputs()
    - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
    - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
-   - e.g. `[{'name': 'data', 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'}]`
+   - e.g. `{ 'data' : { 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'} }`
 - *Return*
  - `outBlob`: Output result of the inferencing
   - Single output model: `outBlob` contains the data of the output blob.
   - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
     - Key: The name of an output blob
     - Value: The contents of an output blob
-    - e.g. `[{'name': 'prob', 'shape': [1, 1000]}]`
+    - e.g. `{ 'prob' : { 'shape': [1, 1000] } }`
 
 ~~~python
 1. infID = asyncInfer(ocvimg)     # for single input model
@@ -153,7 +154,7 @@ list = getOutputs()
    - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
    - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
-   - e.g. `[{'name': 'data', 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'}]`
+   - e.g. `{ 'data' : { 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'} }`
 - *Return*
  - `infID`: ID number of the requested inferencing task
 
@@ -169,7 +170,7 @@ setCallback(callback)
     - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
       - Key: The name of an output blob
       - Value: The contents of an output blob
-      - e.g. `[{'name': 'prob', 'shape': [1, 1000]}]`
+    - e.g. `{ 'prob' : { 'shape': [1, 1000] } }`
 - *Return*
  - None
  

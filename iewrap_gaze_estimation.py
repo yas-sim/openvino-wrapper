@@ -14,7 +14,7 @@ ie_headPose = iewrap.ieWrapper('./intel/head-pose-estimation-adas-0001/FP16/head
 ie_faceLM   = iewrap.ieWrapper('./intel/facial-landmarks-35-adas-0002/FP16/facial-landmarks-35-adas-0002.xml',   'CPU')
 ie_gaze     = iewrap.ieWrapper('./intel/gaze-estimation-adas-0002/FP16/gaze-estimation-adas-0002.xml',           'CPU')
 
-print('hit ESC to exit.')
+print('Please connect a USB web cam. Hit ESC to exit.')
 while cv2.waitKey(1) != 27:         # 27 == ESC
     ret,img = cam.read()
     img = cv2.flip(img, 1)          # flip image

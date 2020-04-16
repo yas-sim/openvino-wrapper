@@ -51,10 +51,11 @@ class ieWrapper:
         outputs = req.outputs
         if self.callbackFunc!=None:
             if(len(outputs)==1):
-                self.callbackFunc(id, outputs[self.outputs[0]['name']])   # if the model has only 1 output, return the blob contents in an array
+                firstBlobName = next(iter(self.outputs))
+                self.callbackFunc(id, outputs[firstBlobName])   # if the model has only 1 output, return the blob contents in an array
             else:
-                self.callbackFunc(id, outputs)                            # if the model has multiple outputs, return the result in dictionary
-                                                                          # e.g. ( {'prob': array[], 'data': array[]})
+                self.callbackFunc(id, outputs)                  # if the model has multiple outputs, return the result in dictionary
+                                                                # e.g. ( {'prob': array[], 'data': array[]})
 
     def imagePreprocess(self, img, shape):
         img = cv2.resize(img, (shape[3], shape[2]))

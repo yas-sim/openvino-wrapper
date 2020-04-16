@@ -16,4 +16,7 @@ cp $INTEL_OPENVINO_DIR/deployment_tools/inference_engine/samples/python/voc_labe
 python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/downloader.py --name googlenet-v1,mobilenet-ssd
 python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/converter.py  --name googlenet-v1,mobilenet-ssd --precisions FP16
 
+# Download models for gaze estimation demo
+python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/downloader.py --name face-detection-adas-0001,head-pose-estimation-adas-0001,facial-landmarks-35-adas-0002,gaze-estimation-adas-0002
+
 pip3 install matplotlib opencv-python numpy
