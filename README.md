@@ -52,10 +52,14 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 ~~~
 
 6. Download images, class label text files, and deep-learning models using a script (`prep.sh`, or `prep.bat`)
-7. Run sample programs
+7. Run sample programs  
 
+**`iewrap_classification.py` sample app**
 ![iewrap_classification.py](./resources/classification.png)
-![iewrap_object_detection.py](./resources/objdet.png)
+
+**`iewrap_object_detection.py` sample app**
+![iewrap_object_detection.py](./resources/objdet.png)  
+
 ## Document
 
 This library supports both blocking (synchronous) inferencing and asynchronous inferencing.  
