@@ -3,9 +3,9 @@ This is a tiny Python class library to wrap and abstract the OpenVINO Inference 
 これはOpenVINOのInference EngineのラッパーライブラリでPythonで書かれています。これを使うことによってディープラーニング推論プログラムを数行で書くことが可能です。
 
 ## Description
-This library conceals common initialization and processing for OpenVINO Inference Engine. User can write a few lines of code to run deep-learning inferencing with this. As the result, user will have less flexibility if they want to run an advanced inferencing with this library but the code is very short and user can easily understand and modify it if they need special features.
+This library conceals common initialization and processing for OpenVINO Inference Engine. User can write a few lines of code to run deep-learning inferencing with this.  
 This library works with Intel Distribution of OpenVINO toolkit. Please make sure that you have installed and setup OpenVINO before try this.   
-このライブラリはOpenVINOのInference Engineの共通の初期化処理やデータ処理をまとめてクラス化したものです。ユーザーは数行のコードを書くだけでディープラーニングの推論を行うことが可能です。結果として、複雑な処理をしようとするといろいろ制限が出ますが、ライブラリのコードは短いので自分で改造して使用することも難しくありません。  
+このライブラリはOpenVINOのInference Engineの共通の初期化処理やデータ処理をまとめてクラス化したものです。ユーザーは数行のコードを書くだけでディープラーニングの推論を行うことが可能です。  
 このライブラリはIntel Distribution of OpenVINO toolkit用のライブラリです。OpenVINOをダウンロードしてセットアップをすることが必要になります。
 
 [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit).
