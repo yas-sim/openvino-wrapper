@@ -108,12 +108,14 @@ list = getOutputs()
    - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
    - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
+   - e.g. `[{'name': 'data', 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'}]`
 - *Return*
  - `outBlob`: Output result of the inferencing
   - Single output model: `outBlob` contains the data of the output blob.
   - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
     - Key: The name of an output blob
     - Value: The contents of an output blob
+    - e.g. `[{'name': 'prob', 'data': 0, 'shape': [1, 1000]}]`
 
 ~~~python
 1. infID = asyncInfer(ocvimg)     # for single input model
@@ -125,7 +127,9 @@ list = getOutputs()
  - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
  - `inputList`: List of input blob information which is created by `getInputs()` API function. 
    - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
-   - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.   - You must use this style of API when your model has multiple inputs. 
+   - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
+   - You must use this style of API when your model has multiple inputs. 
+   - e.g. `[{'name': 'data', 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'}]`
 - *Return*
  - `infID`: ID number of the requested inferencing task
 
@@ -141,6 +145,7 @@ setCallback(callback)
     - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
       - Key: The name of an output blob
       - Value: The contents of an output blob
+      - e.g. `[{'name': 'prob', 'data': 0, 'shape': [1, 1000]}]`
 - *Return*
  - None
  
