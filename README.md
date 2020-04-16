@@ -38,7 +38,6 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 ![iewrap_object_detection.py](./resources/objdet.png)
 ## Document
 
-This library only supports a deep-learning model which has 1 image input and 1 output. The model with multiple inputs or outputs won't work with this library.  
 This library supports both blocking (synchronous) inferencing and asynchronous inferencing.  
 
 1. How to import this library
@@ -74,22 +73,59 @@ readModel(xmlFile, binFile, device='CPU', numRequest=4)
  - None
 
 ~~~python
-outBlob = blockInfer(img)
+list = getInputs()
+~~~
+- *Description*
+ - Return a list of dictionary which represents the input of the model you have loaded.
+ - If the model has multiple inputs, the list will contain multiple dictionaries and each dictionary corresponts to each input.
+- *Input*
+ - None
+- *Output*
+ - List of input blobs of the loaded model.
+ - The list format is: `[ {'name':blobName, 'data':blobData, 'shape':blobShape, 'type':blobType('imgae' or others)}, ... ]`.
+
+~~~python
+list = getOutputs()
+~~~
+- *Description*
+ - Return a list of dictionary which represents the output of the model you have loaded.
+ - If the model has multiple outputs, the list will contain multiple dictionaries and each dictionary corresponts to each output.
+- *Input*
+ - None
+- *Output*
+ - List of output blobs of the loaded model.
+ - The list format is: `[ {'name':blobName, 'data':blobData, 'shape':blobShape}, ... ]`.
+
+~~~python
+1. outBlob = blockInfer(ocvImg)     # for single input model
+2. outBlob = blockInfer(inputList)  # for multiple input model
 ~~~
 - *Description*
  - Start blocking (synchronous) inferencing. The control won't back until the inference task is completed. You can immediately start processing the result after this function call. Blocking inferencing is easy to use but not efficient in terms of computer resource utilization.
 - *Input*
- - `img`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB).  
+ - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
+ - `inputList`: List of input blob information which is created by `getInputs()` API function. 
+   - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
+   - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
+   - You must use this style of API when your model has multiple inputs. 
 - *Return*
  - `outBlob`: Output result of the inferencing
+  - Single output model: `outBlob` contains the data of the output blob.
+  - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
+    - Key: The name of an output blob
+    - Value: The contents of an output blob
 
 ~~~python
-infID = asyncInfer(img)
+1. infID = asyncInfer(ocvimg)     # for single input model
+2. infID = asyncInfer(inputList)  # for multiple input model
 ~~~
 - *Description*
  - Start asynchronous inferencing. Set a callback function before you call this function or the inferencing result will be wasted.
 - *Input*
- - `img`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB).  
+ - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
+ - `inputList`: List of input blob information which is created by `getInputs()` API function. 
+   - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
+   - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.   - You must use this style of API when your model has multiple inputs. 
 - *Return*
  - `infID`: ID number of the requested inferencing task
 
@@ -100,6 +136,11 @@ setCallback(callback)
  - Set a callback function which will be called after completion of each asynchronous inferencing.
 - *Input*
  - `callback`: Name of the callback function. The callback function will receive 1 tuple parameter. The tuple consists of `infID` and `outBlob` `(infID, outBlob)`. You can check the inference result with `outBlob` and identify the reuslt is for which inference request by the `infID`.
+  - The contents of the `outBlob` varies depend on the number of outputs of the model.
+    - Single output model: The `outBlob` contains the contents of the output Blob.
+    - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
+      - Key: The name of an output blob
+      - Value: The contents of an output blob
 - *Return*
  - None
  
