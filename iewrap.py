@@ -33,18 +33,8 @@ class ieWrapper:
         self.execNet = self.ie.load_network(network=net, device_name=device, num_requests=numRequest)
         self.numRequests = numRequest
 
-    # Return information of the inputs of a model
-    # The list consists of dictionaries and each dictionary correspond to each input blob
-    # The blob marked with 'image' type will go through image preprocessing (resize & transform)
-    # e.g. { blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType('imgae' or others)}, ... }
-    def getInputs(self):
-        return self.inputs
-
-    # Return information of the outputs of a model
-    # The list consists of dictionaries and each dictionary correspond to each output blob
-    # e.g. { blobName : { 'shape':blobShape }, ... }
-    def getOutputs(self):
-        return self.outputs
+    def setInputType(self, blobName, inputType):
+        self.inputs[blobName]['type'] = inputType
 
     def callback(self, status, data):
         id, req = data
@@ -64,19 +54,20 @@ class ieWrapper:
         return img
 
     # Creates a dictionary to be consumed as an input of inferencing APIs ( infer(), async_inferar() )
+    # inputData = ocvimage or { blobname0:Blobdata0, blobName1:blobData1,...}
     def createInputBlobDict(self, inputData):
         inBlobList = {}
-        if type(inputData) is np.ndarray:      # if the input is single image
-            firstBlobName = next(iter(self.inputs))
+        firstBlobName = next(iter(self.inputs))
+        if type(inputData) is np.ndarray and self.inputs[firstBlobName]['type']=='image':      # if the input is single image
             resizedImg = self.imagePreprocess(inputData, self.inputs[firstBlobName]['shape'])
             inBlobList = { firstBlobName : resizedImg }
-        elif type(inputData) is dict:         # if the input is a list (multiple inputs)
-            for k, v in inputData.items():
-                if v['type']=='image':        # if the data is image, do preprocess
-                    resizedImg = self.imagePreprocess(v['data'], v['shape'])
-                    inBlobList[k] = resizedImg
-                else:                          # otherwise, just set the data to input blob
-                    inBlobList[k] = v['data']
+        elif type(inputData) is dict:                        # if the input is a list (multiple inputs)
+            for blobName, blobData in inputData.items():
+                if self.inputs[blobName]['type']=='image':   # if the data is image, do preprocess
+                    resizedImg = self.imagePreprocess(blobData, self.inputs[blobName]['shape'])
+                    inBlobList[blobName] = resizedImg
+                else:                                        # otherwise, just set the data to input blob
+                    inBlobList[blobName] = blobData
         else:
             raise
 

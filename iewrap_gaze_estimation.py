@@ -71,12 +71,10 @@ while cv2.waitKey(1) != 27:         # 27 == ESC
                     eyes[i] = cv2.warpAffine(eyes[i], rotMat, (eyes[i].shape[0], eyes[i].shape[1]), flags=cv2.INTER_LINEAR)
 
             # Estimate gaze - Gaze estimation model has multiple inputs, so get input blob information with `getInputs()` and set input data
-            gaze_in = ie_gaze.getInputs()
-            gaze_in['head_pose_angles']['data']=[yaw, pitch, 0] # head_pose_angles (non-image)
-            gaze_in['head_pose_angles']['type']='vec'           # head pose angles are not an image
-            gaze_in['left_eye_image'  ]['data']=eyes[0]         # left_eye_image
-            gaze_in['right_eye_image' ]['data']=eyes[1]         # right_eye_image
-            gaze_vec = ie_gaze.blockInfer(gaze_in)[0]
+            ie_gaze.setInputType('head_pose_angles', 'vec')      # head pose angles are not an image
+            gaze_vec = ie_gaze.blockInfer({ 'head_pose_angles': [yaw, pitch, 0], 
+                                            'left_eye_image'  : eyes[0],
+                                            'right_eye_image' : eyes[1]} )[0]
             gaze_vec_norm = gaze_vec / np.linalg.norm(gaze_vec)  # normalize vector
 
             # Rotate gaze vector by face roll angle

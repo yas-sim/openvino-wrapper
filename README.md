@@ -100,33 +100,19 @@ readModel(xmlFile, binFile, device='CPU', numRequest=4)
  - None
 
 ~~~python
-list = getInputs()
+setInputType(blobName, blobType)
 ~~~
 - *Description*
- - Return a list of dictionary which represents the input of the model you have loaded.
- - If the model has multiple inputs, the list will contain multiple dictionaries and each dictionary corresponts to each input.
+ - Set the type of a input blob. The default type is `'image'`. If the data type you supply is non-image data, you need to set the blob type to other one such as `'vec'`. The type is just a string and this library just cares if it's `'image'` or not. If the type is `'image'`, the blob data will go through image preprocess before inferencing (resize and transform).
 - *Input*
- - None
+ - `blobName`: Name of the blob to set the type
+ - `blobType`: A string. `image` or others
 - *Output*
- - List of input blobs of the loaded model.
- - The list format is: `{ blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType }, ... }`.
-   - `blobType` is a string. The value can be `image`, or others. If the type is `image`, the `blobData` will go through image preprocess before inferencing.
-
-~~~python
-list = getOutputs()
-~~~
-- *Description*
- - Return a list of dictionary which represents the output of the model you have loaded.
- - If the model has multiple outputs, the list will contain multiple dictionaries and each dictionary corresponts to each output.
-- *Input*
- - None
-- *Output*
- - List of output blobs of the loaded model.
- - The list format is: `{ blobName : { 'shape':blobShape }, ... }`.
+ - None   
 
 ~~~python
 1. outBlob = blockInfer(ocvImg)     # for single input model
-2. outBlob = blockInfer(inputList)  # for multiple input model
+2. outBlob = blockInfer(inputDict)  # for multiple input model
 ~~~
 - *Description*
  - Start blocking (synchronous) inferencing. The control won't back until the inference task is completed. You can immediately start processing the result after this function call. Blocking inferencing is easy to use but not efficient in terms of computer resource utilization.
@@ -134,20 +120,20 @@ list = getOutputs()
  - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
  - `inputList`: List of input blob information which is created by `getInputs()` API function. 
    - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
-   - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
+   - The default blob type is `'image'`. You must set appropriate blob type before you start inferencing with `setInputType()` API. If the blob type is `'image'`, the blob data is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the blob data in will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
-   - e.g. `{ 'data' : { 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'} }`
+   - e.g. `{ 'data' : data, 'data1' : data1 }`
 - *Return*
  - `outBlob`: Output result of the inferencing
   - Single output model: `outBlob` contains the data of the output blob.
   - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
     - Key: The name of an output blob
     - Value: The contents of an output blob
-    - e.g. `{ 'prob' : { 'shape': [1, 1000] } }`
+    - e.g. `{ 'prob' : data }`
 
 ~~~python
 1. infID = asyncInfer(ocvimg)     # for single input model
-2. infID = asyncInfer(inputList)  # for multiple input model
+2. infID = asyncInfer(inputDict)  # for multiple input model
 ~~~
 - *Description*
  - Start asynchronous inferencing. Set a callback function before you call this function or the inferencing result will be wasted.
@@ -155,9 +141,9 @@ list = getOutputs()
  - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
  - `inputList`: List of input blob information which is created by `getInputs()` API function. 
    - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
-   - The dictionary has `type` attribute. If you set `image` to the type, the data stored in `data` is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the data in the `data` will be just passed to the Inference Engine without any preprocessing.
+   - The default blob type is `'image'`. You must set appropriate blob type before you start inferencing with `setInputType()` API. If the blob type is `'image'`, the blob data is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the blob data in will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
-   - e.g. `{ 'data' : { 'data': 0, 'shape': [1, 3, 224, 224], 'type': 'image'} }`
+   - e.g. `{ 'data' : data, 'data1' : data1 }`
 - *Return*
  - `infID`: ID number of the requested inferencing task
 
@@ -173,13 +159,35 @@ setCallback(callback)
     - Multiple output model: `outBlob` contains a dictionary which contains the outputs of the model.
       - Key: The name of an output blob
       - Value: The contents of an output blob
-    - e.g. `{ 'prob' : { 'shape': [1, 1000] } }`
+    - e.g. `{ 'prob' : data }`
 - *Return*
  - None
  
+~~~python
+list = getInputs()
+~~~
+- *Description*
+ - Return a dictionary which represents the input of the model you have loaded.
+- *Input*
+ - None
+- *Output*
+ - List of input blobs of the loaded model.
+ - The list format is: `{ blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType }, ... }`.
+   - `blobType` is a string. The value can be `image`, or others. If the type is `image`, the `blobData` will go through image preprocess before inferencing.
+
+~~~python
+list = getOutputs()
+~~~
+- *Description*
+ - Return a list of dictionary which represents the output of the model you have loaded.
+- *Input*
+ - None
+- *Output*
+ - List of output blobs of the loaded model.
+ - The list format is: `{ blobName : { 'shape':blobShape }, ... }`.   
+
 ## Requirement
-This workshop requires [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit
-).
+This workshop requires [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit).
 
 ## Contribution
 
