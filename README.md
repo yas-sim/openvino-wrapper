@@ -72,9 +72,9 @@ ieWrapper(modelFile=None, device='CPU', numRequest=4)
 - *Description*
  - This function creates a `ieWrapper` object.
 - *Input*
- - `modelFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml). A weight file (.bin) with the same base file name wil be automatically loaded.
+ - `modelFile`: Path to an OpenVINO IR format deep-learning model topology file (`.xml`). A weight file (`.bin`) with the same base file name wil be automatically loaded.
  - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
- - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on this device at a time.  
+ - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on the device at a time.  
 - *Return*
  - None
 
@@ -82,12 +82,12 @@ ieWrapper(modelFile=None, device='CPU', numRequest=4)
 readModel(xmlFile, binFile, device='CPU', numRequest=4)
 ~~~
 - *Description*
- - This function reads an OpenVINO IR model data. User does not need to use this function when you have read the model data in the constructor.  
+ - This function reads an OpenVINO IR model data. User does not need to use this function when you have read the model data in the constructor (`ieWrapper()`).  
 - *Input*
  - `xmlFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml).
  - `binFile`: Path to an OpenVINO IR format deep-learning model weight file (.xml).
  - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
- - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on this device at a time.  
+ - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on the device at a time.  
 - *Return*
  - None
 
