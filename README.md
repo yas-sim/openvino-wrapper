@@ -63,6 +63,10 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 **`iewrap_gaze_estimation.py` sample app**  
 ![iewrap_gaze_estimation.py](./resources/gaze.png)  
 
+**`iewrap_object_tracking.py` sample app**  
+![iewrap_object_tracking.py](./resources/tracking.png)  
+
+
 ## Document
 
 This library supports both blocking (synchronous) inferencing and asynchronous inferencing.  

@@ -19,4 +19,7 @@ python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/converter.py
 # Download models for gaze estimation demo
 python3 $INTEL_OPENVINO_DIR/deployment_tools/tools/model_downloader/downloader.py --name face-detection-adas-0001,head-pose-estimation-adas-0001,facial-landmarks-35-adas-0002,gaze-estimation-adas-0002
 
-pip3 install matplotlib opencv-python numpy
+# Download models for object tracking demo
+python "%INTEL_OPENVINO_DIR%\deployment_tools\tools\model_downloader\downloader.py" --name pedestrian-detection-adas-0002,person-reidentification-retail-0031,face-detection-adas-0001,face-reidentification-retail-0095
+
+pip3 install matplotlib opencv-python numpy munkres scipy
