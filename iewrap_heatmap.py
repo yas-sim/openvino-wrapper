@@ -112,7 +112,7 @@ def main():
                 hm.addValue(x, y, 4)
 
         hm.generateFrame()
-        n = (n+1) % 30*10
+        n = (n+1) % 30
         if n==0:
             hm.incrementTime()
         frame = cv2.resize(hm.frame, dsize=(img_out.shape[1], img_out.shape[0]), 
