@@ -75,12 +75,12 @@ class ieWrapper:
     
     def asyncInfer(self, img):
         status = None
-        while status!=0 and status!=-11:
+        while status!=0 and status!=-11:    # Find an idle infer_request
             req = self.execNet.requests[self.inferSlot]
             self.inferSlot = (self.inferSlot+1) % self.numRequests
             status = req.wait(-1)
         infID = self.inferenceID
-        
+
         inBlobDict = self.createInputBlobDict(img)
         req.set_completion_callback(self.callback, (infID, req))        
         req.async_infer(inputs=inBlobDict)
@@ -109,3 +109,7 @@ class ieWrapper:
         else:
             return res                  # if the model has multiple outputs, return the result in dictionary
                                         # e.g. ( {'prob': array[], 'data': array[]})
+
+    def dummyInfer(self):
+        for req in self.execNet.requests:
+            req.infer()
