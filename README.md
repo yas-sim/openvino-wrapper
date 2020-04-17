@@ -64,7 +64,7 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 ![iewrap_gaze_estimation.py](./resources/gaze.png)  
 
 **`iewrap_object_tracking.py` sample app**  
-![iewrap_object_tracking.py](./resources/tracking.png)  
+![iewrap_object_tracking.py](./resources/Tracking.mp4)  
 
 
 ## Document
