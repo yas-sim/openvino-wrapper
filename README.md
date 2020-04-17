@@ -66,6 +66,9 @@ Windows > call "Program Files (x86)\IntelSWTools\OpenVINO\bin\setupvars.bat"
 **`iewrap_object_tracking.py` sample app**  
 ![iewrap_object_tracking.py](./resources/tracking.gif)  
 
+**`iewrap_heatmap.py` sample app**  
+![iewrap_heatmap.py](./resources/heatmap.gif)  
+
 
 ## Document
 
