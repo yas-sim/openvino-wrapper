@@ -81,8 +81,8 @@ def main():
     ie_reid   = iewrap.ieWrapper(model_reid, 'CPU')
 
     # Open USB webcams
-    cap = cv2.VideoCapture(0)
-    #cap = cv2.VideoCapture("../sample-videos/people-detection.mp4")
+    #cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("../sample-videos/people-detection.mp4")
     cap.set(cv2.CAP_PROP_FRAME_WIDTH , 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)   
 
@@ -141,8 +141,9 @@ def main():
 
             # assign ID to the object pairs based on assignment matrix
             for dbIdx, currIdx in combination:
-                curr_feature[currIdx]['id'] = feature_db[dbIdx]['id']   # assign an ID
-                feature_db[dbIdx]['time'] = now                         # update last found time
+                curr_feature[currIdx]['id'] = feature_db[dbIdx]['id']            # assign an ID
+                feature_db[dbIdx]['feature'] = curr_feature[currIdx]['feature']  # update the feature vector in DB with the latest vector
+                feature_db[dbIdx]['time'] = now                                  # update last found time
                 xmin, ymin, xmax, ymax = curr_feature[currIdx]['pos']
                 feature_db[dbIdx]['history'].append([(xmin+xmax)//2, (ymin+ymax)//2])   # position history for trajectory line
                 curr_feature[currIdx]['history'] = feature_db[dbIdx]['history']
