@@ -168,27 +168,27 @@ setCallback(callback)
  - None
  
 ~~~python
-list = getInputs()
+dict = getInputs()
 ~~~
 - *Description*
  - Return a dictionary which represents the input of the model you have loaded.
 - *Input*
  - None
 - *Output*
- - List of input blobs of the loaded model.
- - The list format is: `{ blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType }, ... }`.
+ - Information of the input blobs of the loaded model in a dictionary.
+ - The dict format is: `{ blobName : { 'data':blobData, 'shape':blobShape, 'type':blobType }, ... }`.
    - `blobType` is a string. The value can be `image`, or others. If the type is `image`, the `blobData` will go through image preprocess before inferencing.
 
 ~~~python
-list = getOutputs()
+dict = getOutputs()
 ~~~
 - *Description*
  - Return a list of dictionary which represents the output of the model you have loaded.
 - *Input*
  - None
 - *Output*
- - List of output blobs of the loaded model.
- - The list format is: `{ blobName : { 'shape':blobShape }, ... }`.   
+ - Information of the output blobs of the loaded model in a dictionary.
+ - The dict format is: `{ blobName : { 'shape':blobShape }, ... }`.   
 
 ## Requirement
 This workshop requires [Intel distribution of OpenVINO toolkit](https://software.intel.com/en-us/openvino-toolkit).
