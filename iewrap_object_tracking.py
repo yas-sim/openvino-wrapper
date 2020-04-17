@@ -81,8 +81,8 @@ def main():
     ie_reid   = iewrap.ieWrapper(model_reid, 'CPU')
 
     # Open USB webcams
-    #cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture("../sample-videos/people-detection.mp4")
+    cap = cv2.VideoCapture(0)
+    #cap = cv2.VideoCapture("../sample-videos/people-detection.mp4")
     cap.set(cv2.CAP_PROP_FRAME_WIDTH , 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)   
 
