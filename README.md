@@ -23,7 +23,7 @@ img = cv2.imread('car.png')                     # Read an image to infer
 
 ie = iewrap.ieWrapper('public/googlenet-v1/FP16/googlenet-v1.xml', 'CPU', 4)  # Create an Inference Engine object
 
-output = ie.blockInfer(img)[0]      # Do infer
+output = ie.blockInfer(img).reshape((1000,))    # Do infer
 
 # Sort class probabilities and display top 5 classes
 idx = np.argsort(output)[::-1]
