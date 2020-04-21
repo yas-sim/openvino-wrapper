@@ -58,9 +58,12 @@ class ieWrapper:
     def createInputBlobDict(self, inputData):
         inBlobList = {}
         firstBlobName = next(iter(self.inputs))
-        if type(inputData) is np.ndarray and self.inputs[firstBlobName]['type']=='image':      # if the input is single image
-            resizedImg = self.imagePreprocess(inputData, self.inputs[firstBlobName]['shape'])
-            inBlobList = { firstBlobName : resizedImg }
+        if type(inputData) is np.ndarray:
+            if self.inputs[firstBlobName]['type']=='image':  # if the input is single image
+                resizedImg = self.imagePreprocess(inputData, self.inputs[firstBlobName]['shape'])
+                inBlobList = { firstBlobName : resizedImg }
+            else:
+                inBlobList = { firstBlobName : inputData  }
         elif type(inputData) is dict:                        # if the input is a list (multiple inputs)
             for blobName, blobData in inputData.items():
                 if self.inputs[blobName]['type']=='image':   # if the data is image, do preprocess
