@@ -22,6 +22,24 @@ class ieWrapper:
             fname, ext = os.path.splitext(modelFile)
             self.readModel(fname+'.xml', fname+'.bin', device, numRequest)
 
+    # Return the information of input and output blobs
+    def __str__(self):
+        output ='InputBlob:['
+        for i, inBlob in enumerate(self.inputs):
+            if i!=0:
+                output+=' '
+            output+=str(self.inputs[inBlob])
+        output+='], OutputBlob:['
+        for i, outBlob in enumerate(self.outputs):
+            if i!=0:
+                output+=' '
+            output+=str(self.outputs[outBlob])
+        output+=']'
+        return output
+    
+    def __len__(self):
+        return self.numRequests
+
     def readModel(self, xmlFile, binFile, device='CPU', numRequest=4):
         net = self.ie.read_network(xmlFile, binFile)
         self.inputs  = {}
