@@ -101,7 +101,7 @@ readModel(xmlFile, binFile, device='CPU', numRequest=4)
 - *Input*
  - `xmlFile`: Path to an OpenVINO IR format deep-learning model topology file (.xml).
  - `binFile`: Path to an OpenVINO IR format deep-learning model weight file (.xml).
- - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official OpenVINO document for details.
+ - `device`: Device to run inference. E.g. `CPU`, `GPU`, `MYRIAD`, `HDDL`, `HETERO:FPGA,CPU`. Please refer to the official [OpenVINO document](https://docs.openvinotoolkit.org/latest/_docs_IE_DG_supported_plugins_Supported_Devices.html) for details.
  - `numRequest`: Maximum number of simultaneous inferencing. If you specify 4, you can run 4 inferencing task on the device at a time.  
 - *Return*
  - None
@@ -110,7 +110,7 @@ readModel(xmlFile, binFile, device='CPU', numRequest=4)
 setInputType(blobName, blobType)
 ~~~
 - *Description*
- - Set the type of a input blob. The default type is `'image'`. If the data type you supply is non-image data, you need to set the blob type to other one such as `'vec'`. The type is just a string and this library just cares if it's `'image'` or not. If the type is `'image'`, the blob data will go through image preprocess before inferencing (resize and transform).
+ - Set the type of a input blob. The default type is `'image'`. If the data you supply is a non-image data, you need to set the blob type to other one such as `'vec'`. The type is just a string and this library just cares if it's `'image'` or not. If the type is `'image'`, the blob data will go through image preprocess before inferencing (resize and transform).
 - *Input*
  - `blobName`: Name of the blob to set the type
  - `blobType`: A string. `image` or others
@@ -125,9 +125,8 @@ setInputType(blobName, blobType)
  - Start blocking (synchronous) inferencing. The control won't back until the inference task is completed. You can immediately start processing the result after this function call. Blocking inferencing is easy to use but not efficient in terms of computer resource utilization.
 - *Input*
  - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
- - `inputList`: List of input blob information which is created by `getInputs()` API function. 
-   - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
-   - The default blob type is `'image'`. You must set appropriate blob type before you start inferencing with `setInputType()` API. If the blob type is `'image'`, the blob data is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the blob data in will be just passed to the Inference Engine without any preprocessing.
+ - `inputDict`: Input blob data in `{'blobname':blobData}` style dictionary.   
+   - The default blob type is `'image'`. You must set appropriate blob type before you start inferencing with `setInputType()` API. If the blob type is `'image'`, the blob data is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the blob data will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
    - e.g. `{ 'data' : data, 'data1' : data1 }`
 - *Return*
