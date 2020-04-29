@@ -145,8 +145,7 @@ setInputType(blobName, blobType)
  - Start asynchronous inferencing. Set a callback function before you call this function or the inferencing result will be wasted.
 - *Input*
  - `ocvimg`: OpenCV image data to infer. The image will be resized and transformed to fit to the input blob of the model. The library doesn't swap color channels (such as BGR to RGB). You can use this style of API when your model has single input.
- - `inputList`: List of input blob information which is created by `getInputs()` API function. 
-   - You can obtain the input list with `getInputs()` and stuff your input data to infer to `data` element in the dictionary in the list.
+ - `inputDict`: Input blob data in `{'blobname':blobData}` style dictionary.   
    - The default blob type is `'image'`. You must set appropriate blob type before you start inferencing with `setInputType()` API. If the blob type is `'image'`, the blob data is considered as an OpenCV image data and go through image preprocessing before inferencing (resize and transform), otherwise the blob data in will be just passed to the Inference Engine without any preprocessing.
    - You must use this style of API when your model has multiple inputs. 
    - e.g. `{ 'data' : data, 'data1' : data1 }`
