@@ -6,7 +6,7 @@ import os
 
 import cv2
 import numpy as np
-from openvino.inference_engine import IENetwork, IECore
+from openvino.inference_engine import IECore
 
 class ieWrapper:
 
